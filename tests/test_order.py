@@ -1,14 +1,13 @@
 import pytest
 import requests
-from pathlib import Path
-from helpers import ApiClient
+from helpers.helpers import ApiClient
 from data import BASE_URL, test_user, test_order
 
 class TestOrder:
     # Успешное создание объявления в любой категории
     def test_create_order(self):
         apiclient = ApiClient()
-        auth_response = apiclient.signin(test_user["email"], test_user["password"])
+        apiclient.signin(test_user["email"], test_user["password"])
 
         # Создание объявления
         order_payload = {
@@ -34,7 +33,7 @@ class TestOrder:
     def test_edit_order(self):
         # Авторизация пользователя
         apiclient = ApiClient()
-        auth_response = apiclient.signin(test_user["email"], test_user["password"])
+        apiclient.signin(test_user["email"], test_user["password"])
 
         # Создание объявления для редактирования
         order_payload = {
@@ -60,8 +59,6 @@ class TestOrder:
             "description": test_order["description"],
             "price": str(test_order["price"]),
         }
-        img_path = Path(test_order.get("image_path", "test.png"))
-        files = {"images": (img_path.name, open(img_path, "rb"), "image/png")}
         edit_response = apiclient.update_offer(order_id, edited_order_payload)
         assert edit_response.status_code == 200
         edit_data = edit_response.json()
@@ -72,7 +69,7 @@ class TestOrder:
     def test_edit_order_not_owner(self):
         # Авторизация пользователя
         apiclient = ApiClient()
-        auth_response = apiclient.signin(test_user["email"], test_user["password"])
+        apiclient.signin(test_user["email"], test_user["password"])
 
         edited_order_payload = {
             "name": "Updated Test Order",
@@ -93,7 +90,7 @@ class TestOrder:
     def test_delete_order(self):
         # Авторизация пользователя
         apiclient = ApiClient()
-        auth_response = apiclient.signin(test_user["email"], test_user["password"])
+        apiclient.signin(test_user["email"], test_user["password"])
 
         # Создание объявления для удаления
         order_payload = {

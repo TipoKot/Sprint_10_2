@@ -1,6 +1,6 @@
 import pytest
 import requests
-from helpers import ApiClient
+from helpers.helpers import ApiClient
 from data import BASE_URL, test_user
 
 class TestAuth:
